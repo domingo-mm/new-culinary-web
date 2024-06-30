@@ -11,6 +11,9 @@ importers:
       '@formkit/tempo':
         specifier: ^0.1.2
         version: 0.1.2
+      '@iconify/react':
+        specifier: ^5.0.1
+        version: 5.0.1(react@18.3.1)
       '@tanstack/react-query':
         specifier: ^5.49.0
         version: 5.49.0(react@18.3.1)
@@ -26,6 +29,9 @@ importers:
       styled-components:
         specifier: ^6.1.11
         version: 6.1.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      stylis:
+        specifier: 4.0.0
+        version: 4.0.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -350,6 +356,14 @@ packages:
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
+
+  '@iconify/react@5.0.1':
+    resolution: {integrity: sha512-octpAJRtHZLLS1o6fmz2Ek2Rfwx75kVg48MZyGTqL3QqoxRddEsuLqOt6ADDhRosmlrYnIrVL+7obo1bz2ikNw==}
+    peerDependencies:
+      react: '>=16'
+
+  '@iconify/types@2.0.0':
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
 
   '@jridgewell/gen-mapping@0.3.5':
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
@@ -1094,6 +1108,9 @@ packages:
       react: '>= 16.8.0'
       react-dom: '>= 16.8.0'
 
+  stylis@4.0.0:
+    resolution: {integrity: sha512-kdT29t1M7lMS1hKHvFD28QqT4oxTOIKF5KQD7Dz9UA2Gck9DjDc8IX1sdtHGI3QBRbLKOYhBjuBdcGpH5NibwA==}
+
   stylis@4.3.2:
     resolution: {integrity: sha512-bhtUjWd/z6ltJiQwg0dUfxEJ+W+jdqQd8TbWLWyeIJHlnsqmGLRFFd8e5mA0AZi/zx90smXRlN66YMTcaSFifg==}
 
@@ -1462,6 +1479,13 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/object-schema@2.0.3': {}
+
+  '@iconify/react@5.0.1(react@18.3.1)':
+    dependencies:
+      '@iconify/types': 2.0.0
+      react: 18.3.1
+
+  '@iconify/types@2.0.0': {}
 
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
@@ -2217,6 +2241,8 @@ snapshots:
       shallowequal: 1.1.0
       stylis: 4.3.2
       tslib: 2.6.2
+
+  stylis@4.0.0: {}
 
   stylis@4.3.2: {}
 
