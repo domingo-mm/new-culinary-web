@@ -1,10 +1,14 @@
 ﻿import styled from "styled-components";
 import {Icon} from '@iconify/react';
 import {memo, useCallback, useState} from "react";
+import {themeBreakpoints} from "@/utils/theme.ts";
 
 interface ILikeButton {
     height: number;
-    width: number;
+    width: {
+        max: number;
+        min: number;
+    }
     backgroundColor?: string;
     border?: {
         width?: number;
@@ -16,7 +20,8 @@ interface ILikeButton {
 
 interface LikeButtonDomProps {
     $height: number;
-    $width: number;
+    $minWidth: number;
+    $maxWidth: number;
     $backgroundColor?: string;
     $border?: {
         $borderWidth?: number;
@@ -26,7 +31,7 @@ interface LikeButtonDomProps {
 
 const LikeButtonDom = styled.button<LikeButtonDomProps>`
     height: ${props => props.$height + "px" || "20px"};
-    width: ${props => props.$width + "px" || "20px"};
+    width: clamp(${props => (props.$minWidth + "px" || "20px")}, 10%, ${props => (props.$maxWidth + "px" || "20px")});
     background-color: ${props => props.$backgroundColor || "#FFFFFF"};
     display: flex;
     justify-content: center;
@@ -39,6 +44,12 @@ const LikeButtonDom = styled.button<LikeButtonDomProps>`
             ?  props.$border.$borderColor
             : 'none'};
     cursor: pointer;
+
+    /*
+        TODO: Check how to calc the responsive of the component    
+     */
+    @media(min-width: ${themeBreakpoints.breakpoints.tablet}) { }
+    @media(min-width: ${themeBreakpoints.breakpoints.desktop}) { }
 `
 
 interface IHeartIcon {
@@ -65,7 +76,6 @@ function LikeButton(props: ILikeButton) {
         props.onClick?.(clickedLike);
     }, []);
     
-    
     return <LikeButtonDom 
             onClick={onClickLike}
             $backgroundColor={props.backgroundColor}
@@ -74,7 +84,8 @@ function LikeButton(props: ILikeButton) {
                 $borderColor: props.border?.color,
                 $borderWidth: props.border?.width
             }}
-            $width={props.width}>
+            $maxWidth={props.width.max}
+            $minWidth={props.width.min}>
         <HeartIcon  
             clickedLike={clickedLike} 
             height={props.height}

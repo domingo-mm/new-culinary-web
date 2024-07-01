@@ -1,5 +1,13 @@
 body {
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    
     background-color: #141C24;
+}
+
+#root{
+    align-content: center;
 }
