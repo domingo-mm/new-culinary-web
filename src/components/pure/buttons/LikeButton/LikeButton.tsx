@@ -1,10 +1,9 @@
 ﻿import styled from "styled-components";
 import {Icon} from '@iconify/react';
 import {memo, useCallback, useState} from "react";
-import {themeBreakpoints} from "@/utils/theme.ts";
-
 interface ILikeButton {
     height: number;
+    heartHeight: number;
     width: {
         max: number;
         min: number;
@@ -16,6 +15,14 @@ interface ILikeButton {
     }
     onClick?: (clickedLike: boolean) => void;
     clickedLike?: boolean;
+    strokeColor?: string;
+    position?: {
+        type?: 'absolute' | 'none';
+        top?: number;
+        left?: number;
+        right?: number;
+        bottom?: number;
+    }
 }
 
 interface LikeButtonDomProps {
@@ -27,6 +34,13 @@ interface LikeButtonDomProps {
         $borderWidth?: number;
         $borderColor?: string;
     }
+    $position: {
+        $type?: 'absolute' | 'none';
+        $top?: number;
+        $left?: number;
+        $right?: number;
+        $bottom?: number;
+    }
 }
 
 const LikeButtonDom = styled.button<LikeButtonDomProps>`
@@ -34,6 +48,11 @@ const LikeButtonDom = styled.button<LikeButtonDomProps>`
     width: clamp(${props => (props.$minWidth + "px" || "20px")}, 10%, ${props => (props.$maxWidth + "px" || "20px")});
     background-color: ${props => props.$backgroundColor || "#FFFFFF"};
     display: flex;
+    position: ${props => props?.$position?.$type || "relative"};
+    top: ${props => props?.$position?.$top + "px" || "0px"};
+    left: ${props => props?.$position?.$left + "px" || "0px"};
+    right: ${props => props?.$position?.$right + "px" || "0px"};
+    bottom: ${props => props?.$position?.$bottom + "px" || "0px"};
     justify-content: center;
     align-items: center;
     border-radius: 5px;
@@ -43,18 +62,15 @@ const LikeButtonDom = styled.button<LikeButtonDomProps>`
     border-color: ${props => props.$border
             ?  props.$border.$borderColor
             : 'none'};
+    border-style: solid;
     cursor: pointer;
-
-    /*
-        TODO: Check how to calc the responsive of the component    
-     */
-    @media(min-width: ${themeBreakpoints.breakpoints.tablet}) { }
-    @media(min-width: ${themeBreakpoints.breakpoints.desktop}) { }
+    outline: none;
 `
 
 interface IHeartIcon {
     clickedLike: boolean;
     height: number;
+    strokeColor?: string;
 }
 function HeartIcon(props: IHeartIcon) {
     return props.clickedLike 
@@ -66,15 +82,16 @@ function HeartIcon(props: IHeartIcon) {
         : <Icon 
             icon="mdi:cards-heart-outline" 
             height={props.height + "px"} 
+            color={props.strokeColor}
         />;
 }
 
 function LikeButton(props: ILikeButton) {
-    const [clickedLike, setClickedLike] = useState<boolean>(props.clickedLike || false);
+    const [clickedLike, setClickedLike] = useState<boolean>(false);
     const onClickLike = useCallback(() => {
         setClickedLike(prev => !prev);
-        props.onClick?.(clickedLike);
-    }, []);
+        props.onClick?.(!clickedLike);
+    }, [clickedLike]);
     
     return <LikeButtonDom 
             onClick={onClickLike}
@@ -84,11 +101,19 @@ function LikeButton(props: ILikeButton) {
                 $borderColor: props.border?.color,
                 $borderWidth: props.border?.width
             }}
+            $position={{
+                $type: props.position?.type,
+                $bottom: props.position?.bottom,
+                $left: props.position?.left,
+                $right: props.position?.right,
+                $top: props.position?.top,
+            }}
             $maxWidth={props.width.max}
             $minWidth={props.width.min}>
         <HeartIcon  
             clickedLike={clickedLike} 
-            height={props.height}
+            height={props.heartHeight}
+            strokeColor={props?.strokeColor}
         />
     </LikeButtonDom>
 }

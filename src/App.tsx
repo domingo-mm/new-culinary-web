@@ -3,6 +3,9 @@ import LikeButton from "@/components/pure/buttons/LikeButton/LikeButton.tsx";
 import styled from "styled-components";
 import MainLogo from "./assets/main-logo.svg";
 import {useEffect, useState} from "react";
+import {themeBreakpoints} from "@/utils/theme.ts";
+import CreativeCommon from "@/components/pure/common/CreativeCommon.tsx";
+import CardTile from "@/components/pure/cards/Tile/CardTile.tsx";
 
 const HeaderComponent = styled.div<{$showComponent: boolean}>`
     @keyframes fadeIn {
@@ -27,15 +30,31 @@ const HeaderComponent = styled.div<{$showComponent: boolean}>`
 
 const MainComponent = styled.div`
     display: flex;
+    width: 100%;
     flex-direction: column;
     justify-content: center;
-    gap: .5rem;
+    gap: 2rem;
 `
 
 const MainLogoComponent = styled.img`
-    
-    height: 120px;
+    height: 75px;
     transition: height 0.5s;
+    margin-top: 30px;
+
+    @media(min-width: ${themeBreakpoints.breakpoints.tablet}) {
+        height: 90px;
+    }
+    
+    @media(min-width: ${themeBreakpoints.breakpoints.desktop}) {
+        height: 130px;
+    }
+`
+
+const CardsDiv = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 `
 
 function App() {
@@ -50,9 +69,15 @@ function App() {
     <MainComponent>
         <MainLogoComponent src={MainLogo} alt={"Main Logo"} />
         <HeaderComponent $showComponent={showHeaderComponent}>
-            <SearchInput placeholder={'Hello World!'} onChange={(input) => console.log(input)} />
-            <LikeButton height={30} width={{max: 30, min: 30}} />
+            <SearchInput placeholder={'Search for the recipe ...'} onChange={(input) => console.log(input)} />
+            <LikeButton heartHeight={40} height={40} width={{max: 40, min: 40}} onClick={(clicked) => console.log(clicked)}/>
         </HeaderComponent>
+        <CardsDiv>
+            <CardTile title={""} commentsCounter={0} />
+        </CardsDiv>
+        <CreativeCommon description={
+            `Domingo Mesa Maliniak © ${new Date().getFullYear()}`
+        }/>
     </MainComponent>
   )
 }
