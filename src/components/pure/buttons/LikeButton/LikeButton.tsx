@@ -94,7 +94,10 @@ function LikeButton(props: ILikeButton) {
     }, [clickedLike]);
     
     return <LikeButtonDom 
-            onClick={onClickLike}
+            onClick={(event) => {
+                event.stopPropagation();
+                onClickLike();
+            }}
             $backgroundColor={props.backgroundColor}
             $height={props.height} 
             $border={{

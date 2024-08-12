@@ -6,6 +6,7 @@ interface ICardTile {
     backgroundImage?: string;
     title: string;
     commentsCounter: number;
+    onClick?: () => void;
 }
 
 const MainCardDiv = styled.div`
@@ -59,7 +60,7 @@ export default function CardTile(props: ICardTile) {
     const title = (props.title) ? props.title : 'loading recipe ...';
     const comments = (props.commentsCounter > 0) ? props.commentsCounter : 0;
     
-    return <MainCardDiv>
+    return <MainCardDiv onClick={props.onClick}>
         <HeaderCardDiv $image={props?.backgroundImage}>
             <LikeButton 
                 onClick={() => {
