@@ -11,3 +11,8 @@ body {
 #root{
     align-content: center;
 }
+
+.loading-animation {
+    animation: fadeIn 0.5s ease-in-out;
+}
+

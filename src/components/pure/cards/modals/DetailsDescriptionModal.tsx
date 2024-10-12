@@ -73,12 +73,12 @@ const Title = styled.p`
 const InformationHeader = styled.div`
     display: flex;
     align-items: center;
-    gap: 2em;
+    gap: 1em;
 `;
 const InformationIcons = styled.div`
     display: flex;
     gap: 5px;
-    font-size: 1.2em;
+    font-size: 1em;
     color: white;
     font-weight: bold;
     align-items: center;
@@ -158,7 +158,7 @@ export default function DetailsDescriptionModal(props: IDetailsDescriptionModalP
                     <InformationIcons>
                         <Icon
                             icon="fluent-emoji-high-contrast:fork-and-knife-with-plate"
-                            height={35 + "px"}
+                            height={30 + "px"}
                             color={'white'}
                         />
                         {howMany}
@@ -166,7 +166,7 @@ export default function DetailsDescriptionModal(props: IDetailsDescriptionModalP
                     <InformationIcons>
                         <Icon
                             icon="ant-design:clock-circle-outlined"
-                            height={35 + "px"}
+                            height={30 + "px"}
                             color={'white'}
                         />
                         {howLong}

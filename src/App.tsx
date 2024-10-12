@@ -2,14 +2,15 @@ import SearchInput from "@/components/pure/forms/input/SearchInput";
 import LikeButton from "@/components/pure/buttons/LikeButton/LikeButton";
 import styled from "styled-components";
 import MainLogo from "/main-logo.svg";
-import {useEffect, useState} from "react";
+import {Suspense, useEffect, useState} from "react";
 import {themeBreakpoints} from "@/utils/theme";
 import CreativeCommon from "@/components/pure/common/CreativeCommon";
-import CardTile from "@/components/pure/cards/Tile/CardTile";
 import DetailsDescriptionModal from "@/components/pure/cards/modals/DetailsDescriptionModal";
 import {QueryClient} from "@tanstack/react-query";
 import {PersistQueryClientProvider} from "@tanstack/react-query-persist-client";
 import {createSyncStoragePersister} from "@tanstack/query-sync-storage-persister";
+import CardsSkeleton from "@/components/pure/skeletonsUI/CardsSkeleton.tsx";
+// import {getRecipesFromSearchedWordQuery} from "@/queries/getRecipesFromSearchedWordQuery.ts";
 
 const HeaderComponent = styled.div<{$showComponent: boolean}>`
     @keyframes fadeIn {
@@ -57,15 +58,26 @@ const MainLogoComponent = styled.img`
 const CardsDiv = styled.div`
     display: flex;
     flex-wrap: wrap;
+    width: 100rem;
     justify-content: center;
     gap: 10px;
+    animation: fadeIn 0.5s ease-in-out;
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
 `
 
 export default function App() {
     const queryClient = new QueryClient();
     const persister = createSyncStoragePersister({
         storage: window.localStorage,
-    })
+    });
     
     const [showHeaderComponent, setShowHeaderComponent] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -75,17 +87,27 @@ export default function App() {
             setShowHeaderComponent(true);
         }, 1200);
     }, []);
-  
+    
+    const [searchRecipe, setSearchRecipe] = useState<string>();
+    
+    // TODO: Add debounced functionality for the searched word, and a functionality to not ask all the time the API
+    // const {} = getRecipesFromSearchedWordQuery(searchRecipe.length >= 3 :)
+
   return (
       <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
           <MainComponent>
               <MainLogoComponent src={MainLogo} alt={"Main Logo"} />
               <HeaderComponent $showComponent={showHeaderComponent}>
-                  <SearchInput placeholder={'Search for the recipe ...'} onChange={(input) => console.log(input)} />
+                  <SearchInput 
+                      placeholder={'Search for the recipe ...'} 
+                      onChange={setSearchRecipe} 
+                  />
                   <LikeButton heartHeight={40} height={40} width={{max: 40, min: 40}} onClick={(clicked) => console.log(clicked)}/>
               </HeaderComponent>
               <CardsDiv>
-                  <CardTile onClick={() => setShowModal(true)} title={""} commentsCounter={0} />
+                      <Suspense fallback={<CardsSkeleton count={20}/>}>
+                          {searchRecipe && searchRecipe.length >= 3 && <></>}
+                      </Suspense>
               </CardsDiv>
               <CreativeCommon description={
                   `Domingo Mesa Maliniak © ${new Date().getFullYear()}`
@@ -95,4 +117,6 @@ export default function App() {
       </PersistQueryClientProvider>
   )
 }
+
+
 

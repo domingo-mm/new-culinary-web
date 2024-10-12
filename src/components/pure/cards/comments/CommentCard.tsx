@@ -12,7 +12,6 @@ const CommentDiv = styled.div`
     background-color: #0B1219;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     border-radius: 5px;
     overflow-wrap: break-word;
     padding: 10px;
@@ -52,7 +51,7 @@ export default function CommentCard({comment, date, onDelete}: ICommentCard): Re
             <CommentBodyFooter>
                 <Icon
                     icon="mdi:message-bubble"
-                    height={20 + "px"}
+                    height={15 + "px"}
                     color={'white'}
                 />
                 {dateTile}
@@ -62,7 +61,7 @@ export default function CommentCard({comment, date, onDelete}: ICommentCard): Re
             icon="mdi:delete"
             onClick={onDelete}
             cursor={'pointer'}
-            height={30 + "px"}
+            height={25 + "px"}
             color={'white'}
         />
     </CommentDiv>
