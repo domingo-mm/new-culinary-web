@@ -7,6 +7,7 @@ interface ICardTile {
     title: string;
     commentsCounter: number;
     onClick?: () => void;
+    onLikeClick?: () => void;
 }
 
 const MainCardDiv = styled.div`
@@ -63,9 +64,7 @@ export default function CardTile(props: ICardTile) {
     return <MainCardDiv onClick={props.onClick}>
         <HeaderCardDiv $image={props?.backgroundImage}>
             <LikeButton 
-                onClick={() => {
-                    console.log('hello World')
-                }}
+                onClick={props.onLikeClick}
                 heartHeight={20}
                 height={40} 
                 width={{

@@ -6,11 +6,10 @@ import {Suspense, useEffect, useState} from "react";
 import {themeBreakpoints} from "@/utils/theme";
 import CreativeCommon from "@/components/pure/common/CreativeCommon";
 import DetailsDescriptionModal from "@/components/pure/cards/modals/DetailsDescriptionModal";
-import {QueryClient} from "@tanstack/react-query";
-import {PersistQueryClientProvider} from "@tanstack/react-query-persist-client";
-import {createSyncStoragePersister} from "@tanstack/query-sync-storage-persister";
 import CardsSkeleton from "@/components/pure/skeletonsUI/CardsSkeleton.tsx";
-// import {getRecipesFromSearchedWordQuery} from "@/queries/getRecipesFromSearchedWordQuery.ts";
+import {useDebounce} from "@uidotdev/usehooks";
+import RecipeList from "@/components/business/RecipeList.tsx";
+import {Recipe} from "@/services/concrete/recipe.service.ts";
 
 const HeaderComponent = styled.div<{$showComponent: boolean}>`
     @keyframes fadeIn {
@@ -38,6 +37,7 @@ const MainComponent = styled.div`
     width: 100%;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
     gap: 2rem;
 `
 
@@ -71,16 +71,13 @@ const CardsDiv = styled.div`
             opacity: 1;
         }
     }
-`
+`;
 
 export default function App() {
-    const queryClient = new QueryClient();
-    const persister = createSyncStoragePersister({
-        storage: window.localStorage,
-    });
-    
     const [showHeaderComponent, setShowHeaderComponent] = useState<boolean>(false);
-    const [showModal, setShowModal] = useState<boolean>(false);
+    const [showModal, setShowModal] = useState<{openModal: boolean, recipe?: Recipe}>({
+        openModal: false,
+    });
     
     useEffect(() => {
         setTimeout(() => {
@@ -88,33 +85,35 @@ export default function App() {
         }, 1200);
     }, []);
     
-    const [searchRecipe, setSearchRecipe] = useState<string>();
-    
-    // TODO: Add debounced functionality for the searched word, and a functionality to not ask all the time the API
-    // const {} = getRecipesFromSearchedWordQuery(searchRecipe.length >= 3 :)
-
+    const [searchRecipe, setSearchRecipe] = useState<string>('');
+    const debouncedSearchRecipe = useDebounce(searchRecipe, 500);
+   
   return (
-      <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
+      <>
           <MainComponent>
               <MainLogoComponent src={MainLogo} alt={"Main Logo"} />
               <HeaderComponent $showComponent={showHeaderComponent}>
-                  <SearchInput 
-                      placeholder={'Search for the recipe ...'} 
-                      onChange={setSearchRecipe} 
+                  <SearchInput
+                      placeholder={'Search for the recipe ...'}
+                      onChange={(input) => {
+                          input.length > 3 && setSearchRecipe(input)
+                      }}
                   />
                   <LikeButton heartHeight={40} height={40} width={{max: 40, min: 40}} onClick={(clicked) => console.log(clicked)}/>
               </HeaderComponent>
-              <CardsDiv>
-                      <Suspense fallback={<CardsSkeleton count={20}/>}>
-                          {searchRecipe && searchRecipe.length >= 3 && <></>}
-                      </Suspense>
-              </CardsDiv>
+                  <Suspense fallback={
+                      <CardsDiv>
+                        <CardsSkeleton count={20}/>
+                      </CardsDiv>
+                  }>
+                    <RecipeList debouncedSearchRecipe={debouncedSearchRecipe} setShowModal={setShowModal} />
+                  </Suspense>
               <CreativeCommon description={
                   `Domingo Mesa Maliniak © ${new Date().getFullYear()}`
               }/>
           </MainComponent>
-          <DetailsDescriptionModal showModal={showModal} setShowModal={setShowModal} howLong={4} howMany={10} image={''}/>
-      </PersistQueryClientProvider>
+          <DetailsDescriptionModal recipe={showModal.recipe} showModal={showModal.openModal} setShowModal={setShowModal} howLong={4} howMany={10}/>
+      </>
   )
 }
 

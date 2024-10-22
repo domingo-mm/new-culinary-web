@@ -13,7 +13,7 @@ type RecipeImages = {
     "LARGE": RecipeImage,
 }
 
-type Recipe = {
+export type Recipe = {
     label: string;
     url: string;
     source: string;
@@ -35,5 +35,6 @@ export async function getRecipesFromSearchedWord(searchedWord: string) {
             q: searchedWord,
         }
     });
+    
     return response.data;
 }

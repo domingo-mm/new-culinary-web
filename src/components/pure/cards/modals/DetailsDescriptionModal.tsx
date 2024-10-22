@@ -6,14 +6,19 @@ import {Icon} from "@iconify/react";
 import LikeButton from "@/components/pure/buttons/LikeButton/LikeButton.tsx";
 import CommentCard from "@/components/pure/cards/comments/CommentCard.tsx";
 import { v4 as uuidv4 } from 'uuid';
+import {Recipe} from "@/services/concrete/recipe.service.ts";
 
 const Modal = styled.main`
-    height: 90%;
-    width: 90%;
     background-color: white;
     transition: width 1s;
     border-radius: 5px;
+    height: 90%;
     overflow: hidden;
+
+    position: absolute; 
+    top: 50%;
+    left: 50%; 
+    transform: translate(-50%, -50%);
 
     @media(min-width: ${themeBreakpoints.breakpoints.desktop}) {
         width: 35%;
@@ -37,7 +42,7 @@ const ModalClose = styled.div`
 const ModalHeader = styled.header<{
     $image?: string
 }>`
-    padding: 15px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -75,20 +80,12 @@ const InformationHeader = styled.div`
     align-items: center;
     gap: 1em;
 `;
-const InformationIcons = styled.div`
-    display: flex;
-    gap: 5px;
-    font-size: 1em;
-    color: white;
-    font-weight: bold;
-    align-items: center;
-`;
+
 
 const ModalBody = styled.div`
     height: 100%;
     background-color: #112232;
     padding: 20px;
-    
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -98,6 +95,8 @@ const Ingredients = styled.div``;
 const Comments = styled.div`
     display: flex;
     flex-direction: column;
+    overflow: auto;
+    height: 52%;
     gap: 10px;
 `;
 
@@ -105,16 +104,13 @@ interface IDetailsDescriptionModalProps{
     howMany: number;
     howLong: number;
     showModal: boolean;
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-    title?: string;
-    image?: string;
+    recipe?: Recipe;
+    setShowModal: React.Dispatch<React.SetStateAction<{openModal: boolean, recipe?: Recipe }>>
 }
 
 export default function DetailsDescriptionModal(props: IDetailsDescriptionModalProps): React.ReactElement {
     
-    const howMany = props.howMany ?? 0;
-    const howLong = props.howLong ?? 0;
-    const title = props.title ?? 'Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs';
+    const title = props?.recipe?.label ?? 'Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs';
     const comments: {
         id: string;
         comment: string;
@@ -129,7 +125,42 @@ export default function DetailsDescriptionModal(props: IDetailsDescriptionModalP
             id: uuidv4(),
             comment: 'Hello Matrix',
             date: ''
-        }
+        },
+        {
+            id: uuidv4(),
+            comment: 'Hello Matrix',
+            date: ''
+        },
+        {
+            id: uuidv4(),
+            comment: 'Hello Matrix',
+            date: ''
+        },
+        {
+            id: uuidv4(),
+            comment: 'Hello Matrix',
+            date: ''
+        },
+        {
+            id: uuidv4(),
+            comment: 'Hello Matrix',
+            date: ''
+        },
+        {
+            id: uuidv4(),
+            comment: 'Hello Matrix',
+            date: ''
+        },
+        {
+            id: uuidv4(),
+            comment: 'Hello Matrix',
+            date: ''
+        },
+        {
+            id: uuidv4(),
+            comment: 'Hello Matrix',
+            date: ''
+        },
     ];
     
     const ShowComments = useCallback(() => {
@@ -143,34 +174,23 @@ export default function DetailsDescriptionModal(props: IDetailsDescriptionModalP
         <Modal>
             <ModalClose>
                 <Icon
-                    onClick={() => props.setShowModal(prev => !prev)}
+                    onClick={() => props.setShowModal((prev) => {
+                        return {
+                            ...prev,
+                            openModal: !prev.openModal
+                        }
+                    })}
                     cursor={'pointer'}
                     icon="zondicons:close-outline"
                     height={30 + "px"}
                     color={'112232'}
                 />
             </ModalClose>
-            <ModalHeader>
+            <ModalHeader $image={props?.recipe?.image}>
                 <Title>
                     {title}
                 </Title>
                 <InformationHeader>
-                    <InformationIcons>
-                        <Icon
-                            icon="fluent-emoji-high-contrast:fork-and-knife-with-plate"
-                            height={30 + "px"}
-                            color={'white'}
-                        />
-                        {howMany}
-                    </InformationIcons>
-                    <InformationIcons>
-                        <Icon
-                            icon="ant-design:clock-circle-outlined"
-                            height={30 + "px"}
-                            color={'white'}
-                        />
-                        {howLong}
-                    </InformationIcons>
                     <LikeButton 
                         heartHeight={25} 
                         height={40} 
@@ -181,7 +201,12 @@ export default function DetailsDescriptionModal(props: IDetailsDescriptionModalP
             </ModalHeader>
             <ModalBody>
                 <Ingredients>
-                    <h3 style={{margin: 0, color: 'white'}}>Ingredients:</h3>
+                    <h3 style={{margin: 0, color: 'white', marginBottom: 10}}>Ingredients:</h3>
+                    {
+                        props.recipe?.ingredientLines.map(
+                            (recipeLine) => <span style={{color: 'white'}}>{recipeLine}</span>
+                        )
+                    }
                 </Ingredients>
                 <Comments>
                     <h3 style={{margin: 0, color: 'white'}}>Comments:</h3>

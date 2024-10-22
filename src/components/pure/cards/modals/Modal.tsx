@@ -1,18 +1,18 @@
 ﻿import React from "react";
 import styled from "styled-components";
 
+
 const BGModal = styled.div<{
     $showModal: boolean;
 }>`
-    display: ${props => props.$showModal ? "flex" : "none"};
-    height: 100%;
-    width: 100%;
-    
+    display: ${props => props.$showModal ? "block" : "none"};
     overflow: hidden;
+    width: 100%;
+    height: 100%;
     justify-content: center;
-    align-items: center;
+   
 
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
 
